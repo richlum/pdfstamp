@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.parser.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -50,6 +51,7 @@ public class PdfInsert {
 
         }
         stamper.close();
+        testing(outfn);
     }
     private byte[] getBlankRectImage(int width, int height) throws IOException {
         BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
@@ -62,5 +64,46 @@ public class PdfInsert {
         ImageIO.write(image,"png",baos);
         baos.flush();
         return baos.toByteArray();
+    }
+
+
+    private void testing(String inputpdf) throws IOException {
+        PdfReader reader = new PdfReader(inputpdf);
+        PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+        for (int i=1;i<=reader.getNumberOfPages();i++){
+            parser.processContent(i, new RenderListener() {
+                @Override
+                public void beginTextBlock() {
+
+                }
+
+                @Override
+                public void renderText(TextRenderInfo renderInfo) {
+
+                }
+
+                @Override
+                public void endTextBlock() {
+
+                }
+
+                @Override
+                public void renderImage(ImageRenderInfo renderInfo) {
+                    try {
+                        PdfImageObject image = renderInfo.getImage();
+                        if (image==null) return;
+                        String fn = String.format("pageimage%s.%s",renderInfo.getRef().getNumber(),image.getFileType());
+                        FileOutputStream os = new FileOutputStream(fn);
+                        os.write(image.getImageAsBytes());
+                        os.flush();
+                        os.close();
+                    } catch (IOException e) {
+                        System.err.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
     }
 }
