@@ -30,7 +30,13 @@ public class MyPdf {
     }
 
     private static void test2() {
-        final String fn = "pg_0001.png.pdf";
+        /**
+         * todo: differentiate between a pdf containing sperate barcode image
+         * and a pdf that contains a flattened image that happens to have a barcode
+         * in the lower corner. size is dirrent but both located at 0,0 (or close)
+         */
+        //final String fn = "pg_0001.png.pdf";
+        final String fn = "pg_0002.jpg.pdf";
         Scanner scanner = new Scanner();
 //        PdfReader reader = null;
         try {
@@ -59,6 +65,7 @@ public class MyPdf {
                     try {
                         String result = sc.scanForBarcode(renderInfo.getImage().getBufferedImage(),fn);
                         System.out.println("barcode text: " + result);
+                        if ((result == null)||result.isEmpty()) return;
                         ResultPoint[] points = sc.getResultPoints();
                         cover(reader,points);
 
@@ -76,6 +83,7 @@ public class MyPdf {
     }
 
     private static void cover(PdfReader reader, ResultPoint[] points) throws IOException, DocumentException {
+        if (points == null) return;
         List<ResultPoint> pointList = Arrays.asList(points);
 
         float min_y = pointList.stream().min(Comparator.comparing(ResultPoint::getY)).get().getY();
@@ -89,6 +97,8 @@ public class MyPdf {
         byte[] coverimage = PdfInsert.getBlankRectImage((int)Math.ceil(wt), (int)Math.ceil(ht));
         Image square = Image.getInstance(coverimage);
         square.setAbsolutePosition(0,17);
+        // png, jpg to pdf via print to pdf.  It might cause a border/upward shift. 17 is from trial and error
+        // ht, wt seems to be right but positoin seems offset upwards
 
         System.out.println("ht,wt = " + ht + " , " + wt);
         System.out.println("min x,y = " + min_x + "," + min_y);

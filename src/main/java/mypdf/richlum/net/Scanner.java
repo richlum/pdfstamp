@@ -67,7 +67,6 @@ public class Scanner {
                     });
             System.out.println();
 
-
             return result.getText();
         } catch ( Exception e){
             System.out.println("EX: " +imagename + " " + e.getMessage());
