@@ -1,0 +1,25 @@
+InfoBegin
+InfoKey: ModDate
+InfoValue: D:20190928205430-07'00'
+InfoBegin
+InfoKey: CreationDate
+InfoValue: D:20190927030650+00'00'
+InfoBegin
+InfoKey: Creator
+InfoValue: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36
+InfoBegin
+InfoKey: Producer
+InfoValue: Skia/PDF m76; modified using iText&#174; 5.5.13.1 &#169;2000-2019 iText Group NV (AGPL-version)
+PdfID0: 0ea07bcf78d31a72dab27376dc131197
+PdfID1: 9bdebe83ead27ab44b3f84fdbed3ba79
+NumberOfPages: 2
+PageMediaBegin
+PageMediaNumber: 1
+PageMediaRotation: 0
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792
+PageMediaBegin
+PageMediaNumber: 2
+PageMediaRotation: 0
+PageMediaRect: 0 0 612 792
+PageMediaDimensions: 612 792

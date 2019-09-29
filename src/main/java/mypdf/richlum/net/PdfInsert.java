@@ -65,11 +65,11 @@ public class PdfInsert {
         stamper.close();
         testing(outfn);
     }
-    private byte[] getBlankRectImage(int width, int height) throws IOException {
+    public static byte[] getBlankRectImage(int width, int height) throws IOException {
         BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
         graphics.setBackground(Color.WHITE);
-        graphics.setPaint(Color.RED);
+        graphics.setPaint(Color.BLUE);
         graphics.fill(new Rectangle(image.getWidth(),image.getHeight()));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -83,7 +83,18 @@ public class PdfInsert {
         public String imagename;
         public int imagenumber;
         public String barcodetext;
+        public float xpos;
+        public float ypos;
+        public int width;
+        public int height;
 
+        public ImageData(int pagenumber,String imagename,int imagenumber,float xpos, float ypos, int w, int h){
+            this(pagenumber,imagename,imagenumber);
+            this.xpos=xpos;
+            this.ypos=ypos;
+            this.width=w;
+            this.height=h;
+        }
         public ImageData(int pagenumber,String imagename,int imagenumber){
             this.pagenumber = pagenumber;
             this.imagename = imagename;
@@ -91,7 +102,10 @@ public class PdfInsert {
         }
         @Override
         public String toString(){
-            return new String("pg:" + pagenumber + " ,name:" + imagename + ", txt:" + barcodetext);
+            return new String("pg:" + pagenumber + " ,name:" + imagename +
+                    " ,position " + xpos + "," + ypos +
+                    " ,dim " + width + "," + height +
+                    " ,txt:" + barcodetext);
         }
     }
 
@@ -132,7 +146,12 @@ public class PdfInsert {
                         int page = i.get();
                         int imagecnt = imagenum.get();
                         System.out.println("info: " +page + " " + fn + " " + imagecnt);
-                        ImageData id = new ImageData(page,fn,imagecnt);
+                        //ImageData id = new ImageData(page,fn,imagecnt);
+                        ImageData id = new ImageData(page,fn,imagecnt,
+                                renderInfo.getStartPoint().get(0),
+                                renderInfo.getStartPoint().get(1),
+                                renderInfo.getImage().getBufferedImage().getWidth(),
+                                renderInfo.getImage().getBufferedImage().getHeight());
                         System.out.println( "adding " + id);
                         imagelist.add(id);
                         String rslt = scanForBarcode(image.getBufferedImage(),fn);
