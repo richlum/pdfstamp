@@ -1,6 +1,9 @@
 package mypdf.richlum.net;
 
+import com.itextpdf.text.pdf.parser.Matrix;
+
 public class ImageData {
+    public Matrix imageCTM;
     public int pagenumber;
     public String imagename;
     public int imagenumber;
@@ -9,6 +12,30 @@ public class ImageData {
     public float ypos;
     public int width;
     public int height;
+
+
+
+    public ImageData(int pagenumber, String imagename, int imagenumber, float xpos, float ypos, int w, int h, Matrix ctm, String barcodetxt) {
+        this(pagenumber, imagename, imagenumber);
+        this.xpos = xpos;
+        this.ypos = ypos;
+        this.width = w;
+        this.height = h;
+        this.imageCTM = ctm;
+        this.barcodetext = barcodetxt;
+    }
+
+
+
+    public ImageData(int pagenumber, String imagename, int imagenumber, float xpos, float ypos, int w, int h, Matrix ctm) {
+        this(pagenumber, imagename, imagenumber);
+        this.xpos = xpos;
+        this.ypos = ypos;
+        this.width = w;
+        this.height = h;
+        this.imageCTM = ctm;
+    }
+
 
     public ImageData(int pagenumber, String imagename, int imagenumber, float xpos, float ypos, int w, int h) {
         this(pagenumber, imagename, imagenumber);
@@ -41,7 +68,8 @@ public class ImageData {
         return new String("pg:" + pagenumber + " ,name:" + imagename +
                 " ,position " + xpos + "," + ypos +
                 " ,dim " + width + "," + height +
-                " ,txt:" + barcodetext);
+                " ,txt:" + barcodetext
+        );
     }
 }
 

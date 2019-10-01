@@ -47,6 +47,7 @@ public class Scanner {
         List<ImageData>  imagesData;
         int currImageNumber = 0;
         String currBarcodeText;
+        Matrix imageCTM;
 
         public ImageRenderListener(List<ImageData> imagesData){
             this.imagesData = imagesData;
@@ -83,7 +84,7 @@ public class Scanner {
                 this.setCurrImageY(renderInfo.getStartPoint().get(1));
                 this.setCurrImageWidth(renderInfo.getImage().getBufferedImage().getWidth());
                 this.setCurrImageHeight(renderInfo.getImage().getBufferedImage().getHeight());
-
+                this.setCurrImageCTM(renderInfo.getImageCTM());
                 String barcodeString = scanForBarcode(renderInfo.getImage().getBufferedImage(),imageName);
                 this.setCurrBarcodeText(barcodeString);
 
@@ -97,6 +98,13 @@ public class Scanner {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private void setCurrImageCTM(Matrix imageCTM) {
+            this.imageCTM = imageCTM;
+        }
+        private Matrix getCurrImageCTM() {
+            return this.imageCTM;
         }
 
         private void saveImageFiles(PdfImageObject image, Path path) throws IOException {
@@ -180,7 +188,11 @@ public class Scanner {
                     this.currImageX,
                     this.currImageY,
                     this.currImageWidth,
-                    this.getCurrImageHeight()));
+                    this.getCurrImageHeight(),
+                    this.getCurrImageCTM(),
+                    this.currBarcodeText
+                    ));
+
         }
 
         public List<ImageData> getImagesData() {
@@ -201,6 +213,8 @@ public class Scanner {
         imageRenderListener.getImagesData()
                 .stream()
                 .forEach(System.out::println);
+        stamper.flush();
+        stamper.close();
     }
 
 
@@ -298,4 +312,6 @@ public class Scanner {
     public void setSaveImageFiles(boolean saveImageFiles) {
         this.saveImageFiles = saveImageFiles;
     }
+
+
 }
