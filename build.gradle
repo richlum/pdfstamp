@@ -7,7 +7,7 @@ tasks.withType(JavaCompile) {
 }
 
 group 'MyPdf.richlum.net'
-version '1.0-SNAPSHOT'
+version '0.010-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
