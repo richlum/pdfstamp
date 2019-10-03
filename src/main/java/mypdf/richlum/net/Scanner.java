@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -217,23 +218,25 @@ public class Scanner {
 
 
     public String scanForBarcode(BufferedImage bi, String imagename) throws IOException {
-        System.out.println("w:" + bi.getWidth() + ", h:"+ bi.getHeight());
 
         LuminanceSource source;
         if(bi.getHeight()>=cropht&&bi.getWidth()>=cropwt) {
             // only look in bottom left corner of an images for a barcode if its a big one
             BufferedImage subimage = bi.getSubimage(0,bi.getHeight()-cropht,cropwt,cropht);
-            //source = new BufferedImageLuminanceSource(subimage);
             source = new BufferedImageLuminanceSource(bi,0,bi.getHeight()-cropht,cropwt,cropht);
-            FileOutputStream os = new FileOutputStream("subimage.png");
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(subimage,"png",baos);
-            baos.flush();
-            os.write(baos.toByteArray());
-            os.flush();
-            os.close();
-
+            if (isSaveImageFiles()) {
+                Path targetfilepath = Paths.get(System.getProperty("java.io.tmpdir"), imagename + "_crop.png");
+                FileOutputStream os = new FileOutputStream(targetfilepath.toString());
+                System.out.println("targetfilepath" + targetfilepath.toString() );
+                System.out.println(targetfilepath.getFileSystem() + "\t" + targetfilepath.getFileName() );
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(subimage, "png", baos);
+                baos.flush();
+                os.write(baos.toByteArray());
+                os.flush();
+                os.close();
+            }
         }else{
             // smaller images look for qr code anywhere
             source = new BufferedImageLuminanceSource(bi);
