@@ -171,6 +171,7 @@ public class PdfInsert {
     }
 
     private String scanForBarcode(BufferedImage bi,String imagename)  {
+        // pick something bigger than the size of the barcode that we generate
         int cropht = 201;
         int cropwt = 201;
         System.out.println("w:" + bi.getWidth() + ", h:"+ bi.getHeight());

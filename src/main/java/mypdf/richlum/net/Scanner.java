@@ -48,6 +48,7 @@ public class Scanner {
         int currImageNumber = 0;
         String currBarcodeText;
         Matrix imageCTM;
+        StringBuilder sb;
 
         public ImageRenderListener(List<ImageData> imagesData){
             this.imagesData = imagesData;
@@ -55,17 +56,14 @@ public class Scanner {
 
         @Override
         public void beginTextBlock() {
-
         }
 
         @Override
         public void renderText(TextRenderInfo renderInfo) {
-
         }
 
         @Override
         public void endTextBlock() {
-
         }
 
         @Override
@@ -182,17 +180,17 @@ public class Scanner {
         }
 
         public void setImageData(){
-            this.imagesData.add( new ImageData(this.currPage,
-                    this.currImageName,
-                    ++this.currImageNumber,
-                    this.currImageX,
-                    this.currImageY,
-                    this.currImageWidth,
-                    this.getCurrImageHeight(),
-                    this.getCurrImageCTM(),
-                    this.currBarcodeText
-                    ));
-
+            this.imagesData.add(
+                    new ImageData.ImageDataBuilder()
+                        .withPagenumber(this.currPage)
+                        .withImagename(this.currImageName)
+                        .withXpos(this.currImageX)
+                        .withYpos(this.currImageY)
+                        .withWidth(this.currImageWidth)
+                        .withHeight(this.currImageHeight)
+                        .withImageCTM(this.imageCTM)
+                        .withBarcodetext(this.currBarcodeText)
+                        .build());
         }
 
         public List<ImageData> getImagesData() {
@@ -223,6 +221,7 @@ public class Scanner {
 
         LuminanceSource source;
         if(bi.getHeight()>=cropht&&bi.getWidth()>=cropwt) {
+            // only look in bottom left corner of an images for a barcode if its a big one
             BufferedImage subimage = bi.getSubimage(0,bi.getHeight()-cropht,cropwt,cropht);
             //source = new BufferedImageLuminanceSource(subimage);
             source = new BufferedImageLuminanceSource(bi,0,bi.getHeight()-cropht,cropwt,cropht);
@@ -236,11 +235,12 @@ public class Scanner {
             os.close();
 
         }else{
+            // smaller images look for qr code anywhere
             source = new BufferedImageLuminanceSource(bi);
         }
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         QRCodeReader qrCodeReader = new QRCodeReader();
-        Hashtable hints = new Hashtable();
+        Map<DecodeHintType,Object> hints = new HashMap<>();
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
 
         Result result = null;

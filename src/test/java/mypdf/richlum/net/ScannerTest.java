@@ -27,7 +27,7 @@ public class ScannerTest {
         List<ImageData> imagesData = scanner.getImagesData();
         Assert.assertEquals(4,imagesData.size());
         Assert.assertEquals("pg:1 ,name:page1.image6.png ,position 34.96774,613.0605 ,dim 728,90 ,txt:",imagesData.get(0).toString());
-        Assert.assertEquals(  new Matrix (543.0645f,0.0f,0.0f,67.13709f,34.96774f,613.0605f),imagesData.get(0).imageCTM);
+        Assert.assertEquals(  new Matrix (543.0645f,0.0f,0.0f,67.13709f,34.96774f,613.0605f),imagesData.get(0).getImageCTM());
         Assert.assertEquals("pg:1 ,name:page1.image16.jpg ,position 281.88306,268.4234 ,dim 32,32 ,txt:",imagesData.get(1).toString());
         Assert.assertEquals("pg:1 ,name:page1.image18.jpg ,position 431.0766,268.4234 ,dim 32,32 ,txt:",imagesData.get(2).toString());
         Assert.assertEquals("pg:2 ,name:page2.image35.jpg ,position 431.0766,312.4355 ,dim 32,32 ,txt:",imagesData.get(3).toString());
@@ -44,7 +44,7 @@ public class ScannerTest {
         scanner.processPdf(testfile,outputfile);
         List<ImageData> imagesData = scanner.getImagesData();
         Assert.assertEquals(7,imagesData.size());
-        Assert.assertEquals("pg:1 ,name:page1.image21.jpg ,position 431.0766,312.4355 ,dim 32,32 ,txt:",imagesData.get(0).toString());
+        Assert.assertEquals("pg:1 ,name:page1.image21.jpg ,position 431.0766,312.4355 ,dim 32,32 ,txt:",imagesData.get(0).  toString());
         Assert.assertEquals("pg:1 ,name:page1.image24.png ,position 0.0,0.0 ,dim 225,225 ,txt:",imagesData.get(1).toString());
         Assert.assertEquals("pg:1 ,name:page1.image23.png ,position 100.0,100.0 ,dim 200,200 ,txt:",imagesData.get(2).toString());
         Assert.assertEquals("pg:1 ,name:page1.image22.png ,position 0.0,0.0 ,dim 125,125 ,txt:test entry ,page=2,image=src/main/resources/cpp.png",imagesData.get(3).toString());
